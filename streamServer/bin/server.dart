@@ -1,32 +1,42 @@
+import 'dart:async';
 import 'dart:io';
 
-import 'package:shelf/shelf.dart';
-import 'package:shelf/shelf_io.dart';
-import 'package:shelf_router/shelf_router.dart';
+const String address = "localhost";
+const int port = 1111;
+HttpServer? server;
 
-// Configure routes.
-final _router = Router()
-  ..get('/', _rootHandler)
-  ..get('/echo/<message>', _echoHandler);
+Future<void> main() async {
+   Stream<List<int>> content =
+        File('streamServer/Assets/index.json"').openRead();
+    // List<String> lines = await content
+    //     .transform(utf8.decoder)
+    //     .transform(const LineSplitter())
+    //     .toList();
 
-Response _rootHandler(Request req) {
-  return Response.ok('Hello, World!\n');
+    content.listen((obj) {
+      print(obj.toString());
+    });
+  // bindServer();
+  // startListening();
 }
 
-Response _echoHandler(Request request) {
-  final message = request.params['message'];
-  return Response.ok('$message\n');
+bindServer() async {
+  server = await HttpServer.bind(address, port);
 }
 
-void main(List<String> args) async {
-  // Use any available host or container IP (usually `0.0.0.0`).
-  final ip = InternetAddress.anyIPv4;
+startListening() async {
+  server?.listen((HttpRequest request) async {
+    Stream<List<int>> content =
+        File('streamServer/Assets/index.json"').openRead();
+    // List<String> lines = await content
+    //     .transform(utf8.decoder)
+    //     .transform(const LineSplitter())
+    //     .toList();
 
-  // Configure a pipeline that logs requests.
-  final handler = Pipeline().addMiddleware(logRequests()).addHandler(_router);
+    content.listen((obj) {
+      print(obj);
+    });
 
-  // For running in containers, we respect the PORT environment variable.
-  final port = int.parse(Platform.environment['PORT'] ?? '8080');
-  final server = await serve(handler, ip, port);
-  print('Server listening on port ${server.port}');
+    // request.response
+  });
 }
