@@ -96,9 +96,9 @@ void main() {
       print(
           "${mono[int.parse(input.toString()[0]) - 1]} ${duo[13]} ${get100k(v)}");
     } else if (l == 8) {
-      int v = int.parse(input.toString().substring(1, l));
-      print(
-          "${mono[int.parse(input.toString()[0]) - 1]} ${duo[13]} ${get100k(v)}");
+      int v = int.parse(input.toString().substring(2, l));
+      int i = int.parse(input.toString().substring(0, 2));
+      print("${getDuo(i)} ${duo[13]} ${get100k(v)}");
     }
   }
 }
